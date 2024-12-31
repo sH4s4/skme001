@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Mahasiswa</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #6acae2;
+    box-shadow: #08333d;
+    background-image: url(img/bgbg.jpg);
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.mahasiswa-box {
+    width: 200px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    /* Menambahkan transisi untuk efek halus */
+    transition: all 0.3s ease;
+}
+
+/* Efek hover untuk mengambang */
+.mahasiswa-box:hover {
+    background-color: aqua;
+    /* Menambahkan transformasi mengambang */
+    transform: translateY(-18px);
+    /* Menambahkan bayangan lebih besar saat mengambang */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mahasiswa-box .perempuan:hover {
+    background-color: #ff69b4;
+    /* Menambahkan transformasi mengambang */
+    transform: translateY(-10px);
+    /* Menambahkan bayangan lebih besar saat mengambang */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.foto-mahasiswa {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.buttons {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    /* Menambahkan transisi untuk tombol */
+    transition: all 0.3s ease;
+}
+
+/* Menambahkan efek hover untuk tombol */
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+button.laki-laki {
+    background-color: #ff4444; /* Merah */
+}
+
+button.perempuan {
+    background-color: #ff69b4; /* Pink */
+}
+
+button.all {
+    background-color: #4CAF50; /* Hijau */
+}
+
+.hidden {
+    display: none;
+}
+    </style>
+</head>
+<body>
+    <h1>Penghuni Kelas</h1>
+    <div class="buttons">
+        <button class="laki-laki" onclick="filterMahasiswa('laki-laki')">Laki-laki</button>
+        <button class="perempuan" onclick="filterMahasiswa('perempuan')">Perempuan</button>
+        <button class="all" onclick="filterMahasiswa('all')">Semua</button>
+    </div>
+    <div class="container" id="daftarMahasiswa">
+        <!-- Mahasiswa akan ditambahkan di sini melalui JavaScript -->
+    </div>
+
+    <script>
+        const mahasiswa = [
+            {nama: "BAMZ", gender: "laki-laki", foto: "img/bamz.png"},
+            {nama: "SHASA", gender: "laki-laki", foto: "img/shasa aaaa.jpeg"},
+            {nama: "ICHAL", gender: "laki-laki", foto: "img/ical.jpeg"}, 
+            {nama: "UJANG", gender: "laki-laki"},
+            {nama: "FADHAN", gender: "laki-laki", foto: "img/fadhan.png"}, 
+            {nama: "RAGA", gender: "laki-laki"},
+            {nama: "GILANG", gender: "laki-laki" , foto: "img/gilang.jpeg"}, 
+            {nama: "FERDI", gender: "laki-laki"},
+            {nama: "ADIT", gender: "laki-laki",foto: "img/adit.jpeg"}, 
+            {nama: "SYARIF", gender: "laki-laki" ,foto: "img/syarif.jpeg" },
+            {nama: "KIKI", gender: "laki-laki" }, 
+            {nama: "RAMDHANI", gender: "laki-laki"},
+            {nama: "FITRI", gender: "perempuan", foto: "img/fitri.jpeg"}, 
+            {nama: "SALSABILA", gender: "perempuan"},
+            {nama: "AYU", gender: "perempuan", foto: "img/ayu.png"}, 
+            {nama: "ICHA", gender: "perempuan", foto: "img/icha.jpeg"},
+            {nama: "SYAIFUL", gender: "laki-laki" , foto: "img/syaiful.jpeg"}, 
+            {nama: "RATU", gender: "perempuan", foto: "img/ratu.jpeg"},
+            {nama: "AKMAL", gender: "laki-laki" , foto: ""}, 
+            {nama: "SISKA", gender: "perempuan" , foto: ""},
+            {nama: "WAHYU", gender: "laki-laki" , foto: ""}, 
+            {nama: "NITA", gender: "perempuan" , foto: "img/nita.jpeg"},
+            {nama: "AZIS", gender: "laki-laki" , foto: ""}, 
+            {nama: "SITI", gender: "perempuan"},
+            {nama: "AJI", gender: "laki-laki" , foto: "img/aji.jpeg"}, 
+            {nama: "EZRA" , gender: "laki-laki"},
+            {nama: "GUFRON", gender: "laki-laki"},
+            {nama: "ACENG", gender: "laki-laki", foto: "img/aceng.jpeg"},
+        ];
+
+        const daftarMahasiswa = document.getElementById('daftarMahasiswa');
+
+        function tampilkanMahasiswa() {
+            mahasiswa.forEach((mhs, index) => {
+                const mahasiswaBox = document.createElement('div');
+                mahasiswaBox.className = `mahasiswa-box ${mhs.gender}`;
+                mahasiswaBox.innerHTML = `
+                    <img src="${mhs.foto}" alt="Foto ${mhs.nama}" class="foto-mahasiswa" onerror="this.src='https://via.placeholder.com/150'">
+                    <h3>${mhs.nama}</h3>
+                    <p>Mahasiswa ${index + 1}</p>
+                `;
+                daftarMahasiswa.appendChild(mahasiswaBox);
+            });
+        }
+
+        function filterMahasiswa(filter) {
+            const semuaMahasiswa = document.querySelectorAll('.mahasiswa-box');
+            semuaMahasiswa.forEach(box => {
+                if (filter === 'all' || box.classList.contains(filter)) {
+                    box.classList.remove('hidden');
+                } else {
+                    box.classList.add('hidden');
+                }
+            });
+        }
+
+        tampilkanMahasiswa();
+    </script>
+</body>
+</html>
